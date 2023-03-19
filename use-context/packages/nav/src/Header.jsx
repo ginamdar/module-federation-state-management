@@ -1,12 +1,12 @@
 import React from "react";
 
-import { useCount } from "host/store";
+import { useCount } from "store/store";
 
 export default () => {
   const [count, setCount] = useCount();
   return (
     <header className="bg-blue-700 text-white font-bold text-3xl p-5 flex">
-      <div class="flex-grow">Awesome Header</div>
+      <div className="flex-grow">Awesome Header</div>
       <div>
         {count}
 

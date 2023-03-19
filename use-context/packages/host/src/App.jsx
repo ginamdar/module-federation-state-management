@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import Header from "nav/Header";
 
-import { CountProvider, useCount } from "host/store";
+import { CountProvider, useCount } from "store/store";
 
 import "./index.scss";
 
@@ -13,7 +13,7 @@ const App = () => {
     <div className="text-3xl mx-auto max-w-6xl">
       <Header />
       <div>Name: host</div>
-      <div>Count: {count}</div>
+      <div>Count: {count} for useContext</div>
       <div>
         <button
           onClick={() => setCount(count + 1)}

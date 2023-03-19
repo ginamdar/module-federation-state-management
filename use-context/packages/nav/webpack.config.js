@@ -1,19 +1,20 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-
+const path = require('path');
 const deps = require("./package.json").dependencies;
+
 module.exports = {
-  output: {
-    publicPath: "http://localhost:3001/",
-  },
+
+  entry: path.resolve(__dirname, 'src/Header.jsx'), // + 'path/to/your/file.js',
 
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
 
-  devServer: {
-    port: 3001,
-    historyApiFallback: true,
+  output: {
+    path: path.resolve("dist"),
+    filename: "[name].[fullhash].js",
+    chunkFilename: "[name].[contenthash].js",
+    publicPath: "/",
   },
 
   module: {
@@ -42,9 +43,10 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: "nav",
-      filename: "remoteEntry.js",
+      library: {type: 'var', name: 'nav'},
+      filename: "remoteEntryNav.js",
       remotes: {
-        host: "host@http://localhost:3000/remoteEntry.js",
+        store: "store"
       },
       exposes: {
         "./Header": "./src/Header",
@@ -60,9 +62,6 @@ module.exports = {
           requiredVersion: deps["react-dom"],
         },
       },
-    }),
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
     }),
   ],
 };

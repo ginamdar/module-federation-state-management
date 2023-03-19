@@ -1,11 +1,9 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const path = require("path");
 
 const deps = require("./package.json").dependencies;
 module.exports = {
-  output: {
-    publicPath: "http://localhost:3000/",
-  },
 
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -14,6 +12,13 @@ module.exports = {
   devServer: {
     port: 3000,
     historyApiFallback: true,
+  },
+
+  output: {
+    path: path.resolve("dist"),
+    filename: "[name].[fullhash].js",
+    chunkFilename: "[name].[contenthash].js",
+    publicPath: "/",
   },
 
   module: {
@@ -42,13 +47,11 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: "host",
-      filename: "remoteEntry.js",
+      library: {type: 'var', name: 'host'},
+      filename: "remoteEntryHost.js",
       remotes: {
-        host: "host@http://localhost:3000/remoteEntry.js",
-        nav: "nav@http://localhost:3001/remoteEntry.js",
-      },
-      exposes: {
-        "./store": "./src/store",
+        store: "store",
+        nav: "nav"
       },
       shared: {
         ...deps,
